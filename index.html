@@ -141,7 +141,7 @@
 	function loop(timestamp) {
 		let timeDiff = timestamp - oldTime;
 		oldTime = timestamp;
-		let slowTime = timestamp/5;
+		let slowTime = timestamp/20;
 		if (slowTime < 380) {
 			dash = slowTime + ",500";
 			lineDash = (slowTime / 38) * 25 + ",500"
