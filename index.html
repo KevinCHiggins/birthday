@@ -1,0 +1,375 @@
+<html>
+<link rel="stylesheet" href ="birthday.css" type="text/css" />
+<div class = "container">
+<svg style = "background-color: rgb(210, 0, 180)" id="graphic" xmlns="http://www.w3.org/2000/svg" id="vector" viewBox="0 0 500 500" height="500" width="500">
+	<rect id="bg" width="500" height="500" ></rect></path>
+
+</svg>
+<div class = "centered" id="text">Happy Birthday<br><div class="shadow">
+	<span id="name-1">C</span><span id="name-2">a</span><span id="name-3">t</span><span id="name-4">h</span><span id="name-5">e</span><span id="name-6">r</span><span id="name-7">i</span><span id="name-8">n</span><span id="name-9">e</span><span id="name-10">!</span></div></div>
+</div>
+<p id="greet">Wishing you many happy returns!</p>
+</html>
+<script>
+	dash = "";
+	lineDash = "";
+	stroke = "";
+	textShown = false;
+	//document.querySelector("#dash-array-field").addEventListener("input", function() { dash = this.value });
+	// d="M 50 128 L 152 230 L 20 230 L 20 158 L 50 128" 
+	let svg = document.getElementById("graphic");
+	let test = document.getElementById("test");
+	
+	let oldTime = 0;
+	orX = 250;
+	orY = 250;
+	allShapes = [];
+
+	for (i = 0; i < 16; i++) {
+		shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		shape.id = "line-" + i.toString();
+		shape.setAttributeNS(null, "fill", "none");
+		shape.setAttributeNS(null, "stroke", "#FFFFFF");
+		shape.setAttributeNS(null, "stroke-width", "4");
+		shape.setAttributeNS(null, "d", "");
+		allShapes.push(shape);
+		svg.appendChild(shape);
+		//console.log("Built");
+	}
+	confetti = [];
+	for (i = 0; i < 100; i++) {
+		confetti[i] = {};
+		shape = "";
+		let scale = Math.floor(Math.random() * 4) + 1;
+		let xDrift = Math.random() - 0.5;
+		let type = "";
+		let rand = Math.floor(Math.random() * 6);
+		let x = Math.floor(Math.random() * 500);
+		console.log("Set x for " + i + " to " + x);
+		let y = Math.floor(Math.random() * 500);
+		if (rand < 1) {
+			type = "heart";
+		}
+		else if (rand < 2) {
+			
+			type = "gem1";
+		}
+		else if (rand < 3) {
+			
+			type = "gem2";
+		}
+		else if (rand < 4) {
+			
+			type = "gem3";
+		}
+		else {
+			
+			type = "circle";
+		}
+
+
+		if (type == "heart") {
+			shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
+			shape.setAttributeNS(null, "fill", "rgb(210, 50, 100)");
+			confetti[i] = {"x": "0", "y": "0", "type": "heart", "scale": scale, "xDrift": xDrift, "svg": ""};
+			shape.setAttributeNS(null, "d", getHeart(x, y, scale));
+			shape.id = "conf-" + i.toString();
+			confetti[i].scale = scale;
+			confetti[i].svg = shape;
+		}
+		if (type == "gem1") {
+			shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
+			shape.setAttributeNS(null, "fill", "rgb(255, 255, 255)");
+			confetti[i] = {"x": "0", "y": "0", "type": "gem1", "scale": scale, "xDrift": xDrift, "svg": ""};
+			shape.setAttributeNS(null, "d", getGem1(x, y, scale));
+			shape.id = "conf-" + i.toString();
+			confetti[i].scale = scale;
+			confetti[i].svg = shape;
+		}
+		if (type == "gem2") {
+			shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
+			shape.setAttributeNS(null, "fill", "rgb(20, 30, 180)");
+			confetti[i] = {"x": "0", "y": "0", "type": "gem2", "scale": scale, "xDrift": xDrift, "svg": ""};
+			shape.setAttributeNS(null, "d", getGem2(x, y, scale));
+			shape.id = "conf-" + i.toString();
+			confetti[i].scale = scale;
+			confetti[i].svg = shape;
+		}
+		if (type == "gem3") {
+			shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
+			shape.setAttributeNS(null, "fill", "rgb(30, 180, 20)");
+			confetti[i] = {"x": "0", "y": "0", "type": "gem3", "scale": scale, "xDrift": xDrift, "svg": ""};
+			shape.setAttributeNS(null, "d", getGem3(x, y, scale));
+			shape.id = "conf-" + i.toString();
+			confetti[i].scale = scale;
+			confetti[i].svg = shape;
+		}
+		else if (type == "circle") {
+
+			shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+			shape.setAttributeNS(null, "fill", "rgb(200, 200, 100)");
+			shape.setAttributeNS(null, "cx", x);
+			shape.setAttributeNS(null, "cy", y);
+			shape.setAttributeNS(null, "r", scale);
+			shape.id = "conf-" + i.toString();
+			confetti[i] = {"x": "0", "y": "0", "type": "circle", "scale": scale, "xDrift": xDrift, "svg": ""};
+			confetti[i].scale = scale;
+			confetti[i].svg = shape;
+		}
+
+
+
+
+
+		//shape.setAttributeNS(null, "fill-opacity", 1 - scale / 20);
+		shape.setAttributeNS(null, "stroke", "none");
+		shape.setAttributeNS(null, "visibility", "hidden");
+
+		confetti[i].x = x;
+
+		//shape.setAttributeNS(null, "cx", x);
+		//shape.setAttributeNS(null, "cy", y);
+		//shape.setAttributeNS(null, "r", scale);
+		confetti[i].y = y;
+	
+		
+		
+		svg.appendChild(shape);
+		//console.log("Built");
+	}
+
+	function loop(timestamp) {
+		let timeDiff = timestamp - oldTime;
+		oldTime = timestamp;
+		let slowTime = timestamp/5;
+		if (slowTime < 380) {
+			dash = slowTime + ",500";
+			lineDash = (slowTime / 38) * 25 + ",500"
+			stroke = slowTime / 100;
+			document.getElementById("bg").setAttributeNS(null, "fill", getBG(slowTime));
+		}
+		else {
+			if (!textShown) {
+				document.getElementById("text").style.visibility = "visible";
+				textShown = true;
+			}
+			dash = "";
+			stroke = 4;			
+		} 
+		for (i = 0; i < 10; i++) {
+			let j = i * 40;
+			let r = 40 - Math.sin((slowTime + j) / 50) * 20;
+			let b = Math.sin((slowTime + j) / 100) * 80 + 120;
+			let g = Math.cos((slowTime + j) / 80) * 80 + 70;
+			let col = "rgb(" + r + ", " + g + "," + b + ")";
+			document.getElementById("name-" + (i + 1).toString()).style.color = col;			
+		}
+
+
+		console.log(dash + " " + slowTime);
+
+		//restartId();
+
+		//allShapes =makeQuadrant(orX, orY, xMul, yMul);
+
+
+		//allShapes.push.apply(makeQuadrant(origin, xMul, yMul))
+		//allShapes.push.apply(makeQuadrant(origin, xMul, yMul))
+		//allShapes.push.apply(makeQuadrant(origin, xMul, yMul))
+		// loop through array and append!
+		console.log("allshapes length " + allShapes.length);
+		for (i = 0; i < 4; i++) {		
+			let j = i * 4;
+			let xMul = (i - (i % 2)) - 1;
+			let yMul = ((i % 2) * 2) - 1;
+			let shape = allShapes[i];
+			let l = 250;
+			if (slowTime < 380) {
+				l = (slowTime / 38 ) * 25;
+			}
+			allShapes[j].setAttributeNS(null, "d", getLine(xMul, yMul, true, l));
+			allShapes[j + 1].setAttributeNS(null, "stroke-dasharray", dash);
+			allShapes[j + 1].setAttributeNS(null, "d", getPent(xMul, yMul, true));
+			allShapes[j + 2].setAttributeNS(null, "d", getLine(xMul, yMul, false, l));
+			allShapes[j + 3].setAttributeNS(null, "stroke-dasharray", dash);
+			allShapes[j + 3].setAttributeNS(null, "d", getPent(xMul, yMul, false));
+			console.log("Updated quadrant " + i);
+		}
+		for (i = 0; i < 100; i++) {
+			let scale = confetti[i].scale;
+			let y = confetti[i].y + ((timeDiff / 100) * scale);
+			if (y > 510) {
+				if (slowTime > 380) {
+					confetti[i].svg.setAttributeNS(null, "visibility", "visible");
+				}
+				y = -10;
+			} 
+			confetti[i].y = y;
+			
+			console.log("x is " + confetti[i].x + " drift is " + confetti[i].xDrift);
+			let x = confetti[i].x + (confetti[i].xDrift * (scale));
+			if (x > 510) x = -10;
+			if (x < -10) x = 510;
+			confetti[i].x = x;
+			if (confetti[i].type == "circle") {
+				confetti[i].svg.setAttributeNS(null, "cy", Math.floor(y).toString());
+				confetti[i].svg.setAttributeNS(null, "cx", Math.floor(x).toString());
+			}
+			else if (confetti[i].type == "heart") {
+				confetti[i].svg.setAttributeNS(null, "d", getHeart(Math.floor(x), Math.floor(y), confetti[i].scale));
+			}
+			else if (confetti[i].type == "gem1") {
+				confetti[i].svg.setAttributeNS(null, "d", getGem1(Math.floor(x), Math.floor(y), confetti[i].scale));
+			}
+			else if (confetti[i].type == "gem2") {
+				confetti[i].svg.setAttributeNS(null, "d", getGem2(Math.floor(x), Math.floor(y), confetti[i].scale));
+			}
+			else if (confetti[i].type == "gem3") {
+				confetti[i].svg.setAttributeNS(null, "d", getGem3(Math.floor(x), Math.floor(y), confetti[i].scale));
+			}
+
+		}
+		window.requestAnimationFrame(loop);
+	}
+	function getPent(xMul, yMul, flip) {
+		if (flip) {
+			return "M " + (xMul * s + orX).toString() + " "
+			+ (yMul * (s * 2 + diagP) + orY).toString()  + " "
+			+ "L " + (xMul * (4 * s - p - diagP) + orX).toString() + " "
+			+ (yMul * (5 * s - p) + orY).toString() + " " 
+			+  "L " + (xMul * p + orX).toString() + " " 
+			+ (yMul * (5 * s - p) + orY).toString() + " " 
+			+ "L " + (xMul * p + orX).toString() + " "
+			+ (yMul * (3 * s - p + diagP) + orY).toString() + " z";
+		}	
+		return "M " + (yMul * (s * 2 + diagP) + orY).toString()  + " "
+			+ (xMul * s + orX).toString() + " "
+			+ "L " + (yMul * (5 * s - p) + orY).toString() + " " 
+			+ (xMul * (4 * s - p - diagP) + orX).toString() + " "
+			
+			+  "L " + (yMul * (5 * s - p) + orY).toString() + " " 
+			+ (xMul * p + orX).toString() + " " 
+			+ "L " + (yMul * (3 * s - p + diagP) + orY).toString() + " "
+			+ (xMul * p + orX).toString()  + " z";
+	}
+	function getDiamond(centreX, centreY, scale) {
+		return 	"M " + centreX.toString() + " "
+			+ centreY.toString() + " "
+			+ "m 0 " + (scale * - 2).toString()  + " " 
+			+ "l " + (scale * -1).toString()  + " " 
+			+ (scale * 2).toString()  + " " 
+			+ "l " + (scale * 1).toString()  + " " 
+			+ (scale * 2).toString()  + " "
+			+ "l " + (scale * 1).toString()  + " "
+			+ (scale * -2).toString()  + " "
+			+ "l " + (scale * -1).toString()  + " "
+			+ (scale * -2).toString() ;
+	}
+	function getGem1(centreX, centreY, scale) {
+		return 	"M " + centreX.toString() + " "
+			+ centreY.toString() + " "
+			+ "m 0 " + (scale * - 2).toString()  + " " 
+			+ "l " + (scale * -2).toString()  + " " 
+			+ (scale * 3).toString()  + " " 
+			+ "l " + (scale * 1).toString()  + " " 
+			+ (scale * 1).toString()  + " "
+			+ "l " + (scale * 2).toString()  + " 0 " 
+			+ "l " + (scale * 1).toString()  + " "
+			+ (scale * -1).toString()  + " "
+			+ "l " + (scale * -2).toString()  + " "
+			+ (scale * -3).toString() ;
+	}
+	function getGem2(centreX, centreY, scale) {
+		return 	"M " + centreX.toString() + " "
+			+ centreY.toString() + " "
+			+ "m 0 " + (scale * - 2).toString()  + " " 
+			+ "l " + (scale * -1).toString()  + " " 
+			+ (scale * 1).toString()  + " " 
+			+ "l 0 " + (scale * 2).toString()
+			+ "l " + (scale * 1).toString()  + " " 
+			+ (scale * 1).toString()  + " "
+			+ "l " + (scale * 1).toString()  + " "
+			+ (scale * -1).toString()  + " "
+			+ "l 0 " + (scale * -2).toString()
+			+ "l " + (scale * -1).toString()  + " "
+			+ (scale * -1).toString() ;
+	}
+	function getGem3(centreX, centreY, scale) {
+		return 	"M " + centreX.toString() + " "
+			+ centreY.toString() + " "
+			+ "m " + (scale * - 3).toString()  + " 0 " 
+			+ "l " + (scale * 2).toString()  + " " 
+			+ (scale * 2).toString()  + " " 
+			+ "l " + (scale * 2).toString() + " 0 "
+			+ "l " + (scale * 2).toString()  + " " 
+			+ (scale * -2).toString()  + " "
+
+			+ "l " + (scale * -2).toString()  + " "
+			+ (scale * -2).toString()  + " "
+			+ "l " + (scale * -2).toString() + " 0 "
+			+ "l " + (scale * -2).toString()  + " "
+			+ (scale * 2).toString() ;
+	}
+	function getHeart(centreX, centreY, scale) {
+		return "M " + centreX.toString() + " "
+			+ centreY.toString() + " "
+	
+			
+
+			+ "a " + (scale).toString() + " " + (scale).toString() + " 0 0 0 " + (scale * -2).toString() + " 0 "
+			+ "a " + (scale * 2).toString() + " " + (scale * 2).toString() + " 0 0 0 " + (scale * 2).toString() + " " + (scale * 2).toString()
+			+ "a " + (scale * 2).toString() + " " + (scale * 2).toString() + " 0 0 0 " + (scale * 2).toString() + " " + (scale * -2).toString()
+			+ "a " + (scale).toString() + " " + (scale).toString() + " 0 0 0 " + (scale * -2).toString() + " 0 ";
+			
+			/*
+			+ "q "
+			+ (scale * - 1).toString() + " "
+			+ (scale * - 1).toString() + " "
+			+ (scale * -2).toString()  + " 0 "
+			+ "q 0 " + (scale * 2).toString() + " "
+			+ (scale * 2).toString() + " "
+			+ (scale * 2).toString() + " "
+			+ "q " + (scale * 2).toString()  + " 0 " 
+			+ (scale * 2).toString() + " "
+			+ (scale * -2).toString() + " " + " "
+			+ "q " + (scale * -1).toString()  
+			+ (scale * -1).toString() + " "
+			+ (scale * -2).toString() + " 0";
+			*/
+			
+	}
+	function getLine(xMul, yMul, flip, length) {
+		s = 49;
+		p = 20;
+		diagP = 28;		
+
+
+		if (flip) {
+			return "M " + (orX + (s * 5 * xMul)).toString() + " "
+				+ (orY + (s * 5 * yMul)).toString() + " "
+				+ "l 0 "
+				+ (length * (yMul * -1)).toString();
+		}	
+		return "M " + (orY + (s * 5 * yMul)).toString() + " "
+			+ (orX + (s * 5 * xMul)).toString() + " "
+			+ "l " + (length * (yMul * -1)).toString() + " 0";
+	}
+
+	function getBG(timer) {
+		let ntime = (timer / 380) * 200;
+		return "rgb(" + Math.floor(ntime) + "," + Math.floor(ntime/40) + "," + Math.floor(ntime * 0.8)+ ")";
+	}
+	function createPath(data, pathId) {
+		let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		path.setAttributeNS("http://www.w3.org/2000/svg", "d", "M 50 128 L 152 230 L 20 230 L 20 158 L 50 128" );
+		path.setAttributeNS("http://www.w3.org/2000/svg", "fill", "none");
+		path.setAttributeNS("http://www.w3.org/2000/svg", "stroke", "#000000");
+		path.setAttributeNS("http://www.w3.org/2000/svg", "stroke-width", "2");
+		path.id = pathId;
+		return path;
+	}
+
+	window.requestAnimationFrame(loop);
+	//setInterval(loop, 500);
+
+</script>
